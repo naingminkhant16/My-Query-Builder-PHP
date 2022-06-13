@@ -3,11 +3,12 @@
 class DB
 {
     const DB_HOST = "localhost";
-    const DB_NAME = "internPJ4_ecom";
+    const DB_NAME = "todo";
     const DB_USERNAME = "nmk";
     const DB_PSW = '123456';
+    protected $table = null;
     protected $sql = '';
-    function __construct()
+    function __construct(string $table = null)
     {
         try {
             $this->pdo = new PDO("mysql:dbhost=" . self::DB_HOST . ";dbname=" . self::DB_NAME, self::DB_USERNAME, self::DB_PSW, [
@@ -18,6 +19,7 @@ class DB
             echo $e->getMessage();
             die();
         }
+        $this->table = $table;
     }
 
     protected function crud($query, $data = null, $fetch = null, $fetchAll = null)
@@ -38,27 +40,31 @@ class DB
 
     //Query Builder 
 
-    public function all($table)
+    public function all(string $table = null)
     {
+        $table = $table ?? $this->table;
         return $this->crud("SELECT * FROM $table", null, null, true);
     }
 
-    public function get($table)
+    public function get(string $table = null)
     {
+        $table = $table ?? $this->table;
         $query = "SELECT * FROM $table" . $this->sql;
         // return $query;
         $this->sql = '';
         return $this->crud($query, null, null, true);
     }
 
-    public function find($table, $findValue, $column = "id")
+    public function find($findValue, $column = "id", string $table = null)
     {
+        $table = $table ?? $this->table;
         $query = "SELECT * FROM $table WHERE $column='$findValue'";
         return $this->crud($query, null, true, null);
     }
 
-    public function store(array $data, $table)
+    public function store(array $data, string $table = null)
     {
+        $table = $table ?? $this->table;
         $columns = join(',', array_keys($data));
         $values = join(',', array_map(function ($i) {
             return "'$i'";
@@ -67,14 +73,15 @@ class DB
         return $this->crud($query);
     }
 
-    public function update(array $data, $table)
+    public function update(array $data, string $table = null)
     {
+        $table = $table ?? $this->table;
         $query = "UPDATE $table SET ";
         foreach ($data as $column => $value) {
             $query .= " $column='$value',";
         };
         $query = rtrim($query, ',') . $this->sql;
-        return $query;
+        // return $query;
         $this->sql = '';
         return $this->crud($query);
     }

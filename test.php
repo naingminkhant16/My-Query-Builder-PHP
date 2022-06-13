@@ -19,12 +19,42 @@ $db = new DB;
 //     ->groupWhere()
 //     ->where('tag_id', '=', 1)
 //     ->get('products');
-$res = $db->where('id', '=', 343)
-    ->orWhere('user_id', '=', 42)
-    ->groupWhere()
-    ->where('ff', "<", 43)
-    ->update([
-        'title' => "this is title",
-        'body' => "lorem ispun some words hello world/."
-    ], 'blogs');
+// $res = $db->where('id', '=', 343)
+//     ->orWhere('user_id', '=', 42)
+//     ->groupWhere()
+//     ->where('ff', "<", 43)
+//     ->update([
+//         'title' => "this is title",
+//         'body' => "lorem ispun some words hello world/."
+//     ], 'blogs');
+// $res = $db->between('id', 1, 6)->orderBy('created_at', "DESC")->limit(0, 2)->get('todo');
+
+//instantiate with table name
+// $db = new DB('user');
+// $res = $db->all('todo');
+// $res = $db->where('name', 'LIKE', '%' . 'san' . '%')
+//     ->where('id', '<', '87')
+//     ->groupWhere()
+//     ->where('id', '<', '86')
+//     ->get();
+
+
+// instantiate with table name
+$user = new DB('user');
+// $res = $user->all();
+// $res = $user->where('id', '<', 10)->orderBy('id')->limit(0, 3)->get();
+// $res = $user->between('id', 0, 10)->get();
+// $res = $user->find('77');
+// $res = $user->store(["id" => 2, 'name' => 'WOWO']);
+// $res = $user->where('id', '=', 1)->update(['name' => "NMK"]);
+
+
+// instantiate without table name
+$db = new DB;
+// $res = $db->all('todo');
+// $res = $db->orderBy('id', 'DESC')->limit(0, 3)->get('user');
+// $res = $db->between('id', 0, 5)->get('todo');
+// $res = $db->find('1', 'id', 'user');
+// $res = $db->store(['id' => 1, "name" => "Naing Min Khant"], 'user');
+// $res = $db->where('id', '=', '1')->update(['name' => "nmk"], 'user');
 dd($res);
