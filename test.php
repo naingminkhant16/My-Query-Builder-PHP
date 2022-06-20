@@ -1,6 +1,6 @@
 <?php
-require "config.php";
 require "functions.php";
+require "config.php";
 $db = new DB;
 // $res = $db->where('id', '=', 23)->update(['title' => 'this is title', "body" => "this is body"], 'blogs');
 // $res = $db->where('name', 'LIKE', "%" . "versace" . "%")->orWhere('id', '<', 10)->orWhere('tag_id', '=', 1)->get('products');
@@ -57,4 +57,28 @@ $db = new DB;
 // $res = $db->find('1', 'id', 'user');
 // $res = $db->store(['id' => 1, "name" => "Naing Min Khant"], 'user');
 // $res = $db->where('id', '=', '1')->update(['name' => "nmk"], 'user');
+
+
+
+////testing 
+// $res = $user->where('id', 77)->orWhere('id', '=', 44)->dd();
+// $res = $user->where(function ($query) {
+//     $query->where('id', 4)
+//         ->orWhere('id', '=', 77);
+// })->where('id', '<', 100)->get();
+
+
+// $res = $user->where('id', '<', 100)->where(function ($query) {
+//     $query->where(function ($query) {
+//         $query->where('id', "=", 4)
+//             ->orWhere('id', '=', 77);
+//     })->orWhere('name', '=', 'ggg');
+// })->get();
+
+$res = $user->where('name', "LIKE", "%mg mg%")
+    ->where(function ($query) {
+        $query->where('id', '<', 80)
+            ->orWhere("id", ">", 883);
+    })->orderBy('id', 'desc')->get();
+
 dd($res);

@@ -100,15 +100,37 @@ class DB
 
     public function where($column, $operator = null, $value = null)
     {
-        if (is_array($column)) {
-            $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
+        if (!is_string($column)) {
+            if ($this->sql) { //sql is not empty
+                $currentSql = $this->sql;
+                $this->sql = "";
+                $column($this);
+                $this->sql =  $currentSql . " AND (" . trim(str_replace("WHERE", '', $this->sql)) . ")";
+            } else { //sql is empty ortherwise first where
+                $column($this);
+                $this->sql = " WHERE (" . trim(str_replace("WHERE", '', $this->sql)) . ")";
+            }
+
             return $this;
         }
+
+        // $operatorFilterArr = ['<', '>', 'in', '!'];
+        // if (!in_array($operator, $operatorFilterArr)) {
+        //     $value = $operator;
+        //     $operator = "=";
+        // }
+
+        // if (is_array($column)) {
+        //     $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
+        //     return $this;
+        // }
+
         if (is_array($value)) {
             $value = "(" . join(',', $value) . ")";
         } else {
             $value = "'" . $value . "'";
         }
+
         if (str_contains($this->sql, 'WHERE')) {
             $this->sql .= " AND $column $operator $value";
         } else {
@@ -119,11 +141,26 @@ class DB
 
     public function orWhere($column, $operator = null, $value = null)
     {
+        if (!is_string($column)) {
+            if ($this->sql) { //sql is not empty
+                $currentSql = $this->sql;
+                $this->sql = "";
+                $column($this);
+                $this->sql =  $currentSql . " OR (" . trim(str_replace("WHERE", '', $this->sql)) . ")";
+            } else { //sql is empty ortherwise first where
+                $column($this);
+                $this->sql = " WHERE (" . trim(str_replace("WHERE", '', $this->sql)) . ")";
+            }
+
+            return $this;
+        }
+
         if (is_array($value)) {
             $value = "(" . join(',', $value) . ")";
         } else {
             $value = "'" . $value . "'";
         }
+
         if (str_contains($this->sql, 'WHERE')) {
             $this->sql .= " OR $column $operator $value";
         } else {
@@ -142,5 +179,10 @@ class DB
     {
         $this->sql .= " WHERE $column BETWEEN $start AND $end ";
         return $this;
+    }
+    public function dd($table = null)
+    {
+        $table = $table ?? $this->table;
+        return "SELECT * FROM $table " . $this->sql;
     }
 }
