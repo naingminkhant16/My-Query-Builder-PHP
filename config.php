@@ -100,7 +100,7 @@ class DB
 
     public function where($column, $operator = null, $value = null)
     {
-        if (!is_string($column)) {
+        if (is_object($column)) {
             if ($this->sql) { //sql is not empty
                 $currentSql = $this->sql;
                 $this->sql = "";
@@ -110,10 +110,14 @@ class DB
                 $column($this);
                 $this->sql = " WHERE (" . trim(str_replace("WHERE", '', $this->sql)) . ")";
             }
-
             return $this;
         }
 
+
+        if (!$value) {
+            $value = $operator;
+            $operator = "=";
+        }
         // $operatorFilterArr = ['<', '>', 'in', '!'];
         // if (!in_array($operator, $operatorFilterArr)) {
         //     $value = $operator;
@@ -136,12 +140,13 @@ class DB
         } else {
             $this->sql .= " WHERE $column $operator $value";
         };
+
         return $this;
     }
 
     public function orWhere($column, $operator = null, $value = null)
     {
-        if (!is_string($column)) {
+        if (is_object($column)) {
             if ($this->sql) { //sql is not empty
                 $currentSql = $this->sql;
                 $this->sql = "";
@@ -155,6 +160,12 @@ class DB
             return $this;
         }
 
+        //where('id',77)
+        if (!$value) {
+            $value = $operator;
+            $operator = "=";
+        }
+
         if (is_array($value)) {
             $value = "(" . join(',', $value) . ")";
         } else {
@@ -166,14 +177,15 @@ class DB
         } else {
             $this->sql .= " WHERE $column $operator $value";
         };
+
         return $this;
     }
 
-    public function groupWhere()
-    {
-        $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
-        return $this;
-    }
+    // public function groupWhere()
+    // {
+    //     $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
+    //     return $this;
+    // }
 
     public function between($column, $start, $end)
     {

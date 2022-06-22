@@ -75,10 +75,13 @@ $db = new DB;
 //     })->orWhere('name', '=', 'ggg');
 // })->get();
 
-$res = $user->where('name', "LIKE", "%mg mg%")
-    ->where(function ($query) {
-        $query->where('id', '<', 80)
-            ->orWhere("id", ">", 883);
-    })->orderBy('id', 'desc')->get();
+$res = $user->where(function ($query) {
+    $query->where('id', '<', 80)
+        ->orWhere("id", ">", 883);
+})->where('name', "LIKE", "%mg mg%")->orderBy('id', 'desc')->get();
 
+$res = $user->where('id', '<', 30)->orderBy('id', 'desc')->limit(0, 3)->get();
+
+// $user->store(['id' => 5, 'name' => "store"]);
+// $res = $user->where('id', 5)->update(['name' => 'sss']);
 dd($res);
