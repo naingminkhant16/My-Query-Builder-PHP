@@ -8,6 +8,7 @@ class DB
     const DB_PSW = '123456';
     protected $table = null;
     protected $sql = '';
+
     function __construct(string $table = null)
     {
         try {
@@ -53,6 +54,15 @@ class DB
         // return $query;
         $this->sql = '';
         return $this->crud($query, null, null, true);
+    }
+
+    public function first(string $table = null)
+    {
+        $table = $table ?? $this->table;
+        $query = "SELECT * FROM $table" . $this->sql;
+        // return $query;
+        $this->sql = '';
+        return $this->crud($query, null, true);
     }
 
     public function find($findValue, $column = "id", string $table = null)
@@ -181,17 +191,13 @@ class DB
         return $this;
     }
 
-    // public function groupWhere()
-    // {
-    //     $this->sql = " WHERE " . "(" . trim(str_replace("WHERE", "", $this->sql)) . ")";
-    //     return $this;
-    // }
 
     public function between($column, $start, $end)
     {
         $this->sql .= " WHERE $column BETWEEN $start AND $end ";
         return $this;
     }
+
     public function dd($table = null)
     {
         $table = $table ?? $this->table;

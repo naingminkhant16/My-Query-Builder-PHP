@@ -40,7 +40,7 @@ $db = new DB;
 
 
 // instantiate with table name
-$user = new DB('user');
+// $user = new DB('user');
 // $res = $user->all();
 // $res = $user->where('id', '<', 10)->orderBy('id')->limit(0, 3)->get();
 // $res = $user->between('id', 0, 10)->get();
@@ -50,7 +50,7 @@ $user = new DB('user');
 
 
 // instantiate without table name
-$db = new DB;
+// $db = new DB;
 // $res = $db->all('todo');
 // $res = $db->orderBy('id', 'DESC')->limit(0, 3)->get('user');
 // $res = $db->between('id', 0, 5)->get('todo');
@@ -75,13 +75,13 @@ $db = new DB;
 //     })->orWhere('name', '=', 'ggg');
 // })->get();
 
-$res = $user->where(function ($query) {
-    $query->where('id', '<', 80)
-        ->orWhere("id", ">", 883);
-})->where('name', "LIKE", "%mg mg%")->orderBy('id', 'desc')->get();
 
-$res = $user->where('id', '<', 30)->orderBy('id', 'desc')->limit(0, 3)->get();
+// $res = $user->where('id', '<', 30)->orderBy('id', 'desc')->limit(0, 3)->get();
 
 // $user->store(['id' => 5, 'name' => "store"]);
 // $res = $user->where('id', 5)->update(['name' => 'sss']);
+
+
+$user = new DB('user');
+$res = $user->where('id', 77)->orWhere('id', 1)->first();
 dd($res);
